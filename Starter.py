@@ -1,19 +1,26 @@
 import os
 import sys
 from rich import print
-import Kits_buildings_reports
+import TZnaII
+import ExplicationGP
 import traceback
 from datetime import datetime
 
+
+def ER():
+    errortext = traceback.format_exc()
+    current_datetime = str(datetime.now())
+    current_datetime = current_datetime.replace('.', '_').replace(' ', '_').replace(':', '-')
+    namelog  = f"{os.getcwd()}\\logs\\{current_datetime}.txt"
+    with open(namelog, "w") as f:
+        text = f"""{Id} {TypeReport} {NameFaileDoc}\n{errortext}"""
+        print(text)
+        f.write(text)
+
 try:
-    Id, TypeReport, NameFaileDoc = sys.argv[1:]
+    TypeReport = sys.argv[2]
 except:
-    Id, TypeReport, NameFaileDoc = '', '', ''
-    print("'# входные параметры не корректны'")
-    sys.exit(1)
-
-# Id, TypeReport, NameFaileDoc = '2286', 'TZnaII', 'TZII.docx'
-
+    pass    
 
 '''# создать пустой каталог (папку)'''
 try:
@@ -23,16 +30,16 @@ except:
 
 if TypeReport == 'TZnaII':
     try:
-        sys.exit(Kits_buildings_reports.GO(Id, TypeReport, NameFaileDoc))
+        Id, TypeReport, NameFaileDoc = sys.argv[1:]
+        sys.exit(TZnaII.GO(Id, NameFaileDoc))
     except:
-        errortext = traceback.format_exc()
-        
-        current_datetime = str(datetime.now())
-        current_datetime = current_datetime.replace('.', '_').replace(' ', '_').replace(':', '-')
-        namelog  = f"{os.getcwd()}\\logs\\{current_datetime}.txt"
+        ER()
 
-        with open(namelog, "w") as f:
-            text = f"""{Id} {TypeReport} {NameFaileDoc}\n{errortext}"""
-            print(text)
-            f.write(text)
+if TypeReport == 'ExpGP':
+    try:
+        Id, TypeReport, NameFaileDoc, KO = sys.argv[1:]
+        sys.exit(ExplicationGP.GO(Id, NameFaileDoc, KO))
+    except:
+        ER()
+
 
